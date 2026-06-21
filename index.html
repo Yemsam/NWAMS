@@ -20,12 +20,51 @@
   <body>
     <div id="site-header"></div>
     <main>
-      <section class="hero">
-        <img
-          class="hero-media"
-          src="img/empower.jpeg"
-          alt="NWAMS women at a community event"
-        />
+      <section class="hero" data-hero-carousel aria-roledescription="carousel">
+        <div class="hero-slides">
+          <img
+            class="hero-media active"
+            src="img/photo-1.jpeg"
+            alt="NWAMS community outreach gathering"
+            fetchpriority="high"
+            data-hero-slide
+          />
+          <img
+            class="hero-media"
+            src="img/photo-44.jpg"
+            alt="Women taking part in an NWAMS community programme"
+            loading="lazy"
+            data-hero-slide
+          />
+          <img
+            class="hero-media"
+            src="img/photo-9.jpeg"
+            alt="NWAMS members supporting their community"
+            loading="lazy"
+            data-hero-slide
+          />
+          <img
+            class="hero-media"
+            src="img/photo-222.jpg"
+            alt="NWAMS charitable outreach in action"
+            loading="lazy"
+            data-hero-slide
+          />
+          <img
+            class="hero-media"
+            src="img/Water-is-Life-3.gif"
+            alt="NWAMS clean water project"
+            loading="lazy"
+            data-hero-slide
+          />
+          <img
+            class="hero-media"
+            src="img/empower-2.jpeg"
+            alt="Women participating in an NWAMS empowerment programme"
+            loading="lazy"
+            data-hero-slide
+          />
+        </div>
         <div class="hero-overlay"></div>
         <div class="container hero-content reveal">
           <p class="eyebrow light">Nigerian Women Association Madrid, Spain</p>
@@ -43,6 +82,11 @@
         </div>
         <div class="hero-note">
           <span>Since 2018</span><span>Madrid · Nigeria</span>
+        </div>
+        <div class="hero-carousel-controls" aria-label="Hero carousel controls">
+          <button type="button" class="hero-arrow" data-hero-prev aria-label="Previous photo">‹</button>
+          <div class="hero-dots" data-hero-dots></div>
+          <button type="button" class="hero-arrow" data-hero-next aria-label="Next photo">›</button>
         </div>
       </section>
       <section class="impact-strip" aria-label="Our impact">
