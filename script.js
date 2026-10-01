@@ -1,25 +1,413 @@
-function setupNavigation(){const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();document.querySelectorAll('[data-nav]').forEach(link=>{const active=link.dataset.nav===page;link.classList.toggle('active',active);if(active){link.setAttribute('aria-current','page')}else{link.removeAttribute('aria-current')}});const toggle=document.querySelector('.menu-toggle');const nav=document.querySelector('.main-nav');if(!toggle||!nav)return;toggle.addEventListener('click',()=>{const open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',open);document.body.classList.toggle('menu-open',open)});nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');document.body.classList.remove('menu-open')}))}
-function setupReveal(){const items=document.querySelectorAll('.reveal');if(!('IntersectionObserver'in window)){items.forEach(i=>i.classList.add('shown'));return}const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('shown');observer.unobserve(entry.target)}}),{threshold:.12});items.forEach(item=>observer.observe(item))}
-function setupCounters(){document.querySelectorAll('[data-counter]').forEach(el=>{const target=Number(el.dataset.counter);let started=false;const run=()=>{if(started)return;started=true;const start=performance.now(),duration=1500;const frame=now=>{const progress=Math.min((now-start)/duration,1),value=Math.floor(target*(1-Math.pow(1-progress,3)));el.textContent=value.toLocaleString();if(progress<1)requestAnimationFrame(frame)};requestAnimationFrame(frame)};const observer=new IntersectionObserver(entries=>{if(entries[0].isIntersecting){run();observer.disconnect()}},{threshold:.5});observer.observe(el)})}
-function setupForms(){document.querySelectorAll('form[data-demo-form]').forEach(form=>form.addEventListener('submit',event=>{event.preventDefault();const feedback=form.querySelector('.form-feedback');if(feedback)feedback.textContent='Thank you. Your message has been received.';form.reset()}))}
+function setupNavigation() {
+  const page = (
+    location.pathname.split("/").pop() || "index.html"
+  ).toLowerCase();
+  document.querySelectorAll("[data-nav]").forEach((link) => {
+    const active = link.dataset.nav === page;
+    link.classList.toggle("active", active);
+    if (active) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+  const toggle = document.querySelector(".menu-toggle");
+  const nav = document.querySelector(".main-nav");
+  if (!toggle || !nav) return;
+  toggle.addEventListener("click", () => {
+    const open = nav.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", open);
+    document.body.classList.toggle("menu-open", open);
+  });
+  nav.querySelectorAll("a").forEach((link) =>
+    link.addEventListener("click", () => {
+      nav.classList.remove("open");
+      document.body.classList.remove("menu-open");
+    }),
+  );
+}
+function setupReveal() {
+  const items = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)) {
+    items.forEach((i) => i.classList.add("shown"));
+    return;
+  }
+  const observer = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("shown");
+          observer.unobserve(entry.target);
+        }
+      }),
+    { threshold: 0.12 },
+  );
+  items.forEach((item) => observer.observe(item));
+}
+function setupCounters() {
+  document.querySelectorAll("[data-counter]").forEach((el) => {
+    const target = Number(el.dataset.counter);
+    let started = false;
+    const run = () => {
+      if (started) return;
+      started = true;
+      const start = performance.now(),
+        duration = 1500;
+      const frame = (now) => {
+        const progress = Math.min((now - start) / duration, 1),
+          value = Math.floor(target * (1 - Math.pow(1 - progress, 3)));
+        el.textContent = value.toLocaleString();
+        if (progress < 1) requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          run();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(el);
+  });
+}
+function setupForms() {
+  document.querySelectorAll("form[data-demo-form]").forEach((form) =>
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const feedback = form.querySelector(".form-feedback");
+      if (feedback)
+        feedback.textContent = "Thank you. Your message has been received.";
+      form.reset();
+    }),
+  );
+}
 
-function setupFavicon(){if(!document.querySelector('link[rel~="icon"]')){const icon=document.createElement('link');icon.rel='icon';icon.type='image/png';icon.href='img/logo.png';document.head.appendChild(icon)}if(!document.querySelector('link[rel="apple-touch-icon"]')){const touchIcon=document.createElement('link');touchIcon.rel='apple-touch-icon';touchIcon.href='img/logo.png';document.head.appendChild(touchIcon)}}
-function setupSocialLinks(){document.querySelectorAll('.socials a').forEach(link=>{link.target='_blank';link.rel='noopener noreferrer'})}
+function setupFavicon() {
+  if (!document.querySelector('link[rel~="icon"]')) {
+    const icon = document.createElement("link");
+    icon.rel = "icon";
+    icon.type = "image/png";
+    icon.href = "img/logo.png";
+    document.head.appendChild(icon);
+  }
+  if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+    const touchIcon = document.createElement("link");
+    touchIcon.rel = "apple-touch-icon";
+    touchIcon.href = "img/logo.png";
+    document.head.appendChild(touchIcon);
+  }
+}
+function setupSocialLinks() {
+  document.querySelectorAll(".socials a").forEach((link) => {
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+}
 
-function setupYouTubeVideos(){document.querySelectorAll('.video-frame iframe[src*="youtube.com/embed/"]').forEach(iframe=>{const source=new URL(iframe.src);const match=source.pathname.match(/\/embed\/([^/]+)/);if(!match)return;const videoId=match[1];if(location.protocol==='file:'){const start=source.searchParams.get('start');const watchUrl=`https://www.youtube.com/watch?v=${videoId}${start?`&t=${start}s`:''}`;const link=document.createElement('a');link.className='video-direct-link';link.href=watchUrl;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label',`${iframe.title}. Watch on YouTube`);link.innerHTML=`<img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="" loading="lazy"><span><b>▶</b> Watch video on YouTube</span>`;iframe.replaceWith(link);return}const embed=new URL(`https://www.youtube-nocookie.com/embed/${videoId}`);source.searchParams.forEach((value,key)=>embed.searchParams.set(key,value));embed.searchParams.set('rel','0');embed.searchParams.set('origin',location.origin);iframe.src=embed.toString();iframe.referrerPolicy='strict-origin-when-cross-origin'})}
+function setupYouTubeVideos() {
+  document
+    .querySelectorAll('.video-frame iframe[src*="youtube.com/embed/"]')
+    .forEach((iframe) => {
+      const source = new URL(iframe.src);
+      const match = source.pathname.match(/\/embed\/([^/]+)/);
+      if (!match) return;
+      const videoId = match[1];
+      if (location.protocol === "file:") {
+        const start = source.searchParams.get("start");
+        const watchUrl = `https://www.youtube.com/watch?v=${videoId}${start ? `&t=${start}s` : ""}`;
+        const link = document.createElement("a");
+        link.className = "video-direct-link";
+        link.href = watchUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.setAttribute("aria-label", `${iframe.title}. Watch on YouTube`);
+        link.innerHTML = `<img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="" loading="lazy"><span><b>▶</b> Watch video on YouTube</span>`;
+        iframe.replaceWith(link);
+        return;
+      }
+      const embed = new URL(
+        `https://www.youtube-nocookie.com/embed/${videoId}`,
+      );
+      source.searchParams.forEach((value, key) =>
+        embed.searchParams.set(key, value),
+      );
+      embed.searchParams.set("rel", "0");
+      embed.searchParams.set("origin", location.origin);
+      iframe.src = embed.toString();
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+    });
+}
 
-function browserLanguage(){const raw=(navigator.languages&&navigator.languages[0])||navigator.language||'en';const base=raw.toLowerCase().split('-')[0];const aliases={zh:'zh-CN',he:'iw',jv:'jw'};return aliases[base]||base}
-function languageName(code){try{return new Intl.DisplayNames([navigator.language||'en'],{type:'language'}).of(code)||code.toUpperCase()}catch{return code.toUpperCase()}}
-function loadGoogleTranslation(target){if(document.querySelector('script[data-nwams-translate]'))return;let host=document.getElementById('google_translate_element');if(!host){host=document.createElement('div');host.id='google_translate_element';document.body.appendChild(host)}window.nwamsGoogleTranslateInit=()=>{new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:target,autoDisplay:false},'google_translate_element');let attempts=0;const selectLanguage=setInterval(()=>{const select=document.querySelector('.goog-te-combo');attempts+=1;if(select){select.value=target;select.dispatchEvent(new Event('change'));clearInterval(selectLanguage);document.querySelector('.translation-reset')?.classList.add('visible')}else if(attempts>40){clearInterval(selectLanguage)}},250)};const script=document.createElement('script');script.src='https://translate.google.com/translate_a/element.js?cb=nwamsGoogleTranslateInit';script.async=true;script.dataset.nwamsTranslate='true';document.head.appendChild(script)}
-function clearTranslation(){localStorage.removeItem('nwams_translate_lang');document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain='+location.hostname;location.reload()}
-function setupLanguageConsent(){const target=browserLanguage();if(target==='en')return;const saved=localStorage.getItem('nwams_translate_lang');if(saved){loadGoogleTranslation(saved);return}if(localStorage.getItem('nwams_translate_declined')===target)return;const prompt=document.createElement('div');prompt.className='translation-prompt';prompt.innerHTML=`<div class="translation-dialog" role="dialog" aria-modal="true" aria-labelledby="translation-title"><p class="eyebrow">Language preference</p><h2 id="translation-title">Translate this site into ${languageName(target)}?</h2><p>Your browser appears to use ${languageName(target)}. The site will remain in English unless you choose to translate it.</p><div class="translation-actions"><button class="btn btn-gold" type="button" data-translate-accept>Yes, translate</button><button class="btn translation-decline" type="button" data-translate-decline>Keep English</button></div></div>`;document.body.appendChild(prompt);const accept=prompt.querySelector('[data-translate-accept]');const decline=prompt.querySelector('[data-translate-decline]');accept.focus();accept.addEventListener('click',()=>{localStorage.setItem('nwams_translate_lang',target);prompt.remove();loadGoogleTranslation(target)});decline.addEventListener('click',()=>{localStorage.setItem('nwams_translate_declined',target);prompt.remove()})}
-function setupTranslationReset(){const button=document.createElement('button');button.type='button';button.className='translation-reset';button.textContent='View in English';button.addEventListener('click',clearTranslation);document.body.appendChild(button)}
+function browserLanguage() {
+  const raw =
+    (navigator.languages && navigator.languages[0]) ||
+    navigator.language ||
+    "en";
+  const base = raw.toLowerCase().split("-")[0];
+  const aliases = { zh: "zh-CN", he: "iw", jv: "jw" };
+  return aliases[base] || base;
+}
+function languageName(code) {
+  try {
+    return (
+      new Intl.DisplayNames([navigator.language || "en"], {
+        type: "language",
+      }).of(code) || code.toUpperCase()
+    );
+  } catch {
+    return code.toUpperCase();
+  }
+}
+function loadGoogleTranslation(target) {
+  if (document.querySelector("script[data-nwams-translate]")) return;
+  let host = document.getElementById("google_translate_element");
+  if (!host) {
+    host = document.createElement("div");
+    host.id = "google_translate_element";
+    document.body.appendChild(host);
+  }
+  window.nwamsGoogleTranslateInit = () => {
+    new google.translate.TranslateElement(
+      { pageLanguage: "en", includedLanguages: target, autoDisplay: false },
+      "google_translate_element",
+    );
+    let attempts = 0;
+    const selectLanguage = setInterval(() => {
+      const select = document.querySelector(".goog-te-combo");
+      attempts += 1;
+      if (select) {
+        select.value = target;
+        select.dispatchEvent(new Event("change"));
+        clearInterval(selectLanguage);
+        document.querySelector(".translation-reset")?.classList.add("visible");
+      } else if (attempts > 40) {
+        clearInterval(selectLanguage);
+      }
+    }, 250);
+  };
+  const script = document.createElement("script");
+  script.src =
+    "https://translate.google.com/translate_a/element.js?cb=nwamsGoogleTranslateInit";
+  script.async = true;
+  script.dataset.nwamsTranslate = "true";
+  document.head.appendChild(script);
+}
+function clearTranslation() {
+  localStorage.removeItem("nwams_translate_lang");
+  document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+  document.cookie =
+    "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=" +
+    location.hostname;
+  location.reload();
+}
+function setupLanguageConsent() {
+  const target = browserLanguage();
+  if (target === "en") return;
+  const saved = localStorage.getItem("nwams_translate_lang");
+  if (saved) {
+    loadGoogleTranslation(saved);
+    return;
+  }
+  if (localStorage.getItem("nwams_translate_declined") === target) return;
+  const prompt = document.createElement("div");
+  prompt.className = "translation-prompt";
+  prompt.innerHTML = `<div class="translation-dialog" role="dialog" aria-modal="true" aria-labelledby="translation-title"><p class="eyebrow">Language preference</p><h2 id="translation-title">Translate this site into ${languageName(target)}?</h2><p>Your browser appears to use ${languageName(target)}. The site will remain in English unless you choose to translate it.</p><div class="translation-actions"><button class="btn btn-gold" type="button" data-translate-accept>Yes, translate</button><button class="btn translation-decline" type="button" data-translate-decline>Keep English</button></div></div>`;
+  document.body.appendChild(prompt);
+  const accept = prompt.querySelector("[data-translate-accept]");
+  const decline = prompt.querySelector("[data-translate-decline]");
+  accept.focus();
+  accept.addEventListener("click", () => {
+    localStorage.setItem("nwams_translate_lang", target);
+    prompt.remove();
+    loadGoogleTranslation(target);
+  });
+  decline.addEventListener("click", () => {
+    localStorage.setItem("nwams_translate_declined", target);
+    prompt.remove();
+  });
+}
+function setupTranslationReset() {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "translation-reset";
+  button.textContent = "View in English";
+  button.addEventListener("click", clearTranslation);
+  document.body.appendChild(button);
+}
 
-function setupGalleryCarousel(){const carousel=document.getElementById('gallery-carousel');if(!carousel)return;const sourceImages=[...document.querySelectorAll('.gallery-collection .gallery-grid img')];if(!sourceImages.length)return;const shuffled=[...sourceImages].sort(()=>Math.random()-.5).slice(0,Math.min(8,sourceImages.length));const stage=carousel.querySelector('.carousel-stage');const dotsHost=carousel.querySelector('.carousel-dots');shuffled.forEach((image,index)=>{const figure=document.createElement('figure');figure.className='carousel-slide'+(index===0?' active':'');const clone=document.createElement('img');clone.src=image.src;clone.alt=image.alt;clone.loading=index===0?'eager':'lazy';figure.appendChild(clone);stage.appendChild(figure);const dot=document.createElement('button');dot.type='button';dot.className='carousel-dot'+(index===0?' active':'');dot.setAttribute('aria-label',`Show photo ${index+1}`);dot.addEventListener('click',()=>show(index));dotsHost.appendChild(dot)});const slides=[...stage.children];const dots=[...dotsHost.children];let current=0;let timer;const show=index=>{current=(index+slides.length)%slides.length;slides.forEach((slide,i)=>slide.classList.toggle('active',i===current));dots.forEach((dot,i)=>dot.classList.toggle('active',i===current))};const start=()=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;clearInterval(timer);timer=setInterval(()=>show(current+1),4800)};carousel.querySelector('.carousel-prev').addEventListener('click',()=>{show(current-1);start()});carousel.querySelector('.carousel-next').addEventListener('click',()=>{show(current+1);start()});carousel.addEventListener('mouseenter',()=>clearInterval(timer));carousel.addEventListener('mouseleave',start);carousel.addEventListener('focusin',()=>clearInterval(timer));carousel.addEventListener('focusout',start);let touchStart=0;stage.addEventListener('touchstart',event=>{touchStart=event.changedTouches[0].clientX},{passive:true});stage.addEventListener('touchend',event=>{const distance=event.changedTouches[0].clientX-touchStart;if(Math.abs(distance)>45){show(current+(distance<0?1:-1));start()}},{passive:true});start()}
+function setupGalleryCarousel() {
+  const carousel = document.getElementById("gallery-carousel");
+  if (!carousel) return;
+  const sourceImages = [
+    ...document.querySelectorAll(".gallery-collection .gallery-grid img"),
+  ];
+  if (!sourceImages.length) return;
+  const shuffled = [...sourceImages]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, Math.min(8, sourceImages.length));
+  const stage = carousel.querySelector(".carousel-stage");
+  const dotsHost = carousel.querySelector(".carousel-dots");
+  shuffled.forEach((image, index) => {
+    const figure = document.createElement("figure");
+    figure.className = "carousel-slide" + (index === 0 ? " active" : "");
+    const clone = document.createElement("img");
+    clone.src = image.src;
+    clone.alt = image.alt;
+    clone.loading = index === 0 ? "eager" : "lazy";
+    figure.appendChild(clone);
+    stage.appendChild(figure);
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "carousel-dot" + (index === 0 ? " active" : "");
+    dot.setAttribute("aria-label", `Show photo ${index + 1}`);
+    dot.addEventListener("click", () => show(index));
+    dotsHost.appendChild(dot);
+  });
+  const slides = [...stage.children];
+  const dots = [...dotsHost.children];
+  let current = 0;
+  let timer;
+  const show = (index) => {
+    current = (index + slides.length) % slides.length;
+    slides.forEach((slide, i) =>
+      slide.classList.toggle("active", i === current),
+    );
+    dots.forEach((dot, i) => dot.classList.toggle("active", i === current));
+  };
+  const start = () => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    clearInterval(timer);
+    timer = setInterval(() => show(current + 1), 4800);
+  };
+  carousel.querySelector(".carousel-prev").addEventListener("click", () => {
+    show(current - 1);
+    start();
+  });
+  carousel.querySelector(".carousel-next").addEventListener("click", () => {
+    show(current + 1);
+    start();
+  });
+  carousel.addEventListener("mouseenter", () => clearInterval(timer));
+  carousel.addEventListener("mouseleave", start);
+  carousel.addEventListener("focusin", () => clearInterval(timer));
+  carousel.addEventListener("focusout", start);
+  let touchStart = 0;
+  stage.addEventListener(
+    "touchstart",
+    (event) => {
+      touchStart = event.changedTouches[0].clientX;
+    },
+    { passive: true },
+  );
+  stage.addEventListener(
+    "touchend",
+    (event) => {
+      const distance = event.changedTouches[0].clientX - touchStart;
+      if (Math.abs(distance) > 45) {
+        show(current + (distance < 0 ? 1 : -1));
+        start();
+      }
+    },
+    { passive: true },
+  );
+  start();
+}
 
-function setupHeroCarousel(){const carousel=document.querySelector('[data-hero-carousel]');if(!carousel)return;const slides=[...carousel.querySelectorAll('[data-hero-slide]')];const dotsHost=carousel.querySelector('[data-hero-dots]');if(slides.length<2||!dotsHost)return;let current=0;let timer;const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;const dots=slides.map((_,index)=>{const dot=document.createElement('button');dot.type='button';dot.className='hero-dot'+(index===0?' active':'');dot.setAttribute('aria-label',`Show hero photo ${index+1}`);dot.addEventListener('click',()=>{show(index);start()});dotsHost.appendChild(dot);return dot});const show=index=>{current=(index+slides.length)%slides.length;slides.forEach((slide,i)=>{const active=i===current;slide.classList.toggle('active',active);slide.setAttribute('aria-hidden',String(!active))});dots.forEach((dot,i)=>{dot.classList.toggle('active',i===current);dot.setAttribute('aria-current',i===current?'true':'false')})};const stop=()=>clearInterval(timer);const start=()=>{stop();if(!reducedMotion)timer=setInterval(()=>show(current+1),5200)};carousel.querySelector('[data-hero-prev]')?.addEventListener('click',()=>{show(current-1);start()});carousel.querySelector('[data-hero-next]')?.addEventListener('click',()=>{show(current+1);start()});carousel.addEventListener('mouseenter',stop);carousel.addEventListener('mouseleave',start);carousel.addEventListener('focusin',stop);carousel.addEventListener('focusout',start);let touchStart=0;carousel.addEventListener('touchstart',event=>{touchStart=event.changedTouches[0].clientX},{passive:true});carousel.addEventListener('touchend',event=>{const distance=event.changedTouches[0].clientX-touchStart;if(Math.abs(distance)>45){show(current+(distance<0?1:-1));start()}},{passive:true});document.addEventListener('visibilitychange',()=>document.hidden?stop():start());show(0);start()}
+function setupHeroCarousel() {
+  const carousel = document.querySelector("[data-hero-carousel]");
+  if (!carousel) return;
+  const slides = [...carousel.querySelectorAll("[data-hero-slide]")];
+  const dotsHost = carousel.querySelector("[data-hero-dots]");
+  if (slides.length < 2 || !dotsHost) return;
+  let current = 0;
+  let timer;
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const dots = slides.map((_, index) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "hero-dot" + (index === 0 ? " active" : "");
+    dot.setAttribute("aria-label", `Show hero photo ${index + 1}`);
+    dot.addEventListener("click", () => {
+      show(index);
+      start();
+    });
+    dotsHost.appendChild(dot);
+    return dot;
+  });
+  const show = (index) => {
+    current = (index + slides.length) % slides.length;
+    slides.forEach((slide, i) => {
+      const active = i === current;
+      slide.classList.toggle("active", active);
+      slide.setAttribute("aria-hidden", String(!active));
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("active", i === current);
+      dot.setAttribute("aria-current", i === current ? "true" : "false");
+    });
+  };
+  const stop = () => clearInterval(timer);
+  const start = () => {
+    stop();
+    if (!reducedMotion) timer = setInterval(() => show(current + 1), 5200);
+  };
+  carousel.querySelector("[data-hero-prev]")?.addEventListener("click", () => {
+    show(current - 1);
+    start();
+  });
+  carousel.querySelector("[data-hero-next]")?.addEventListener("click", () => {
+    show(current + 1);
+    start();
+  });
+  carousel.addEventListener("mouseenter", stop);
+  carousel.addEventListener("mouseleave", start);
+  carousel.addEventListener("focusin", stop);
+  carousel.addEventListener("focusout", start);
+  let touchStart = 0;
+  carousel.addEventListener(
+    "touchstart",
+    (event) => {
+      touchStart = event.changedTouches[0].clientX;
+    },
+    { passive: true },
+  );
+  carousel.addEventListener(
+    "touchend",
+    (event) => {
+      const distance = event.changedTouches[0].clientX - touchStart;
+      if (Math.abs(distance) > 45) {
+        show(current + (distance < 0 ? 1 : -1));
+        start();
+      }
+    },
+    { passive: true },
+  );
+  document.addEventListener("visibilitychange", () =>
+    document.hidden ? stop() : start(),
+  );
+  show(0);
+  start();
+}
 
-document.addEventListener('DOMContentLoaded',()=>{setupFavicon();setupSocialLinks();setupNavigation();setupYouTubeVideos();setupReveal();setupCounters();setupForms();setupHeroCarousel();setupGalleryCarousel();setupTranslationReset();setupLanguageConsent();document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear())});
+document.addEventListener("DOMContentLoaded", () => {
+  setupFavicon();
+  setupSocialLinks();
+  setupNavigation();
+  setupYouTubeVideos();
+  setupReveal();
+  setupCounters();
+  setupForms();
+  setupHeroCarousel();
+  setupGalleryCarousel();
+  setupTranslationReset();
+  setupLanguageConsent();
+  document
+    .querySelectorAll("[data-year]")
+    .forEach((el) => (el.textContent = new Date().getFullYear()));
+});
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
