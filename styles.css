@@ -1771,25 +1771,12 @@ textarea {
   position: relative;
   display: flex;
   flex: 0 0 260px;
-  flex-direction: column;
-  justify-content: end;
   height: 210px;
-  padding: 24px;
   border-radius: 18px;
   overflow: hidden;
   background: var(--green);
   color: #fff;
   box-shadow: 0 18px 42px rgba(6, 48, 38, 0.14);
-}
-.project-carousel-card:before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    transparent 28%,
-    rgba(3, 31, 24, 0.9) 100%
-  );
 }
 .project-carousel-card img {
   position: absolute;
@@ -1802,24 +1789,6 @@ textarea {
 .project-carousel-card:hover img,
 .project-carousel-card:focus-visible img {
   transform: scale(1.06);
-}
-.project-carousel-card span,
-.project-carousel-card strong {
-  position: relative;
-  z-index: 1;
-}
-.project-carousel-card span {
-  margin-bottom: 7px;
-  color: var(--lime);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.project-carousel-card strong {
-  font:
-    600 1.55rem/1.1 "Playfair Display",
-    serif;
 }
 .project-carousel-card:focus-visible {
   outline: 3px solid var(--gold);
@@ -1856,11 +1825,7 @@ textarea {
   .project-carousel-card {
     flex-basis: 205px;
     height: 165px;
-    padding: 19px;
     border-radius: 14px;
-  }
-  .project-carousel-card strong {
-    font-size: 1.3rem;
   }
 }
 @media (prefers-reduced-motion: reduce) {
